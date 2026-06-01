@@ -61,3 +61,10 @@ const getAdj = (b) => {
     return a;
 }
 
+// Pixels positions for a board index (used with CSS transform:translate)
+const tilePos = (i) => ({
+    x: GAP + (i % N) * (TILE + GAP),
+    y: GAP + Math.floor(i / N) * (TILE + GAP),
+});
+
+const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
