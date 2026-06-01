@@ -32,3 +32,20 @@ const solvable = (b) => {
         ? inv % 2 === 0
         : inv % 2 === 1; 
 };
+
+const isSolved = (b) =>
+    b.every((v, i) => (i < TOTAL - 1 ? v === i + 1 : v ===0));
+
+const newGame = () => {
+    let b;
+    do {
+        b = solvedArr();
+        for (let i = b.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [b[i], b[j]] = [b[j], b[i]];
+        }
+    } while (!solvable(b) || isSolved(b));
+    return b;
+};
+
+// 
