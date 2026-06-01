@@ -234,3 +234,19 @@ const CSS = `
  
 @keyframes pzFade { from { opacity: 0; } to { opacity: 1; } }
 `;
+
+// Component
+export default function FifteenPuzzle() {
+    const [board,   setBoard]    = useState(newGame);
+    const [moves,   setMoves]    = useState(0);
+    const [time,    setTime]     = useState(0);
+    const [running, setRunning]  = useState(false);
+    const [won,     setWon]      = useState(false);
+
+    // Timer
+    useEffect(() => {
+        if (!running || won) return;
+        const id = setInterval(() => setTime((t) => t + 1), 1000);
+        return () => clearInterval(id);
+    }, [running, won]);
+}
