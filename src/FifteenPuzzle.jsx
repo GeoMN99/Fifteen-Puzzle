@@ -68,3 +68,169 @@ const tilePos = (i) => ({
 });
 
 const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+
+// Styles
+const CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@700&display=swap');
+ 
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border-width: 0;
+}
+ 
+.pz-root {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 28px 16px 32px; gap: 18px;
+  font-family: 'Space Mono', monospace;
+}
+ 
+.pz-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 50px; letter-spacing: 10px;
+  color: var(--color-text-primary); line-height: 1; text-align: center;
+}
+ 
+.pz-sub {
+  font-size: 9px; letter-spacing: 5px;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase; text-align: center; margin-top: 4px;
+}
+ 
+.pz-stats {
+  display: flex;
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  background: var(--color-background-secondary);
+}
+ 
+.pz-stat {
+  display: flex; flex-direction: column;
+  align-items: center; padding: 10px 30px; gap: 2px;
+}
+ 
+.pz-stat + .pz-stat {
+  border-left: 0.5px solid var(--color-border-secondary);
+}
+ 
+.pz-sn {
+  font-size: 22px; font-weight: 700;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1; min-width: 52px; text-align: center;
+}
+ 
+.pz-sl {
+  font-size: 9px; letter-spacing: 2px;
+  color: var(--color-text-tertiary); text-transform: uppercase;
+}
+ 
+.pz-board {
+  position: relative;
+  background: var(--color-background-tertiary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+}
+ 
+/* ── tiles ──
+   Key insight: tiles are keyed by VALUE, not index.
+   React keeps the same DOM node across renders, so when
+   the board array changes after a move, only the CSS
+   transform changes → the browser animates the slide. */
+.pz-tile {
+  position: absolute; top: 0; left: 0;
+  border-radius: var(--border-radius-md);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 130ms cubic-bezier(.25, .46, .45, .94);
+  will-change: transform;
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  cursor: default; user-select: none;
+}
+ 
+.pz-tile-empty {
+  background: transparent !important;
+  border: none !important;
+  pointer-events: none;
+}
+ 
+.pz-tile-movable {
+  cursor: pointer;
+  border-color: var(--color-border-secondary);
+}
+ 
+.pz-tile-movable:hover {
+  background: var(--color-background-info);
+  border-color: var(--color-border-info);
+}
+ 
+.pz-tile-movable:hover .pz-num {
+  color: var(--color-text-info);
+}
+ 
+.pz-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px; color: var(--color-text-primary);
+  line-height: 1; letter-spacing: 1px;
+  transition: color .12s;
+}
+ 
+.pz-ord {
+  position: absolute; bottom: 5px; right: 7px;
+  font-size: 11px; color: var(--color-text-tertiary); font-weight: 700;
+}
+ 
+.pz-dot {
+  position: absolute; top: 7px; left: 7px;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--color-border-secondary);
+}
+ 
+.pz-won {
+  position: absolute; inset: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--color-background-primary);
+  animation: pzFade .4s ease;
+}
+ 
+.pz-won-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px; letter-spacing: 6px;
+  color: var(--color-text-success);
+  line-height: 1; text-align: center;
+}
+ 
+.pz-won-sub {
+  font-size: 11px; letter-spacing: 2px;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase; text-align: center; margin-top: 8px;
+}
+ 
+.pz-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; letter-spacing: 3px;
+  padding: 10px 36px; cursor: pointer;
+  border-radius: var(--border-radius-md);
+  border: 0.5px solid var(--color-border-secondary);
+  background: var(--color-background-primary);
+  color: var(--color-text-secondary);
+  transition: all .15s;
+}
+ 
+.pz-btn:hover {
+  border-color: var(--color-border-primary);
+  color: var(--color-text-primary);
+  background: var(--color-background-secondary);
+}
+ 
+.pz-btn:active { transform: scale(.97); }
+ 
+.pz-hint {
+  font-size: 10px; color: var(--color-text-tertiary);
+  letter-spacing: 1px; text-align: center;
+}
+ 
+@keyframes pzFade { from { opacity: 0; } to { opacity: 1; } }
+`;
