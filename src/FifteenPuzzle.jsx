@@ -249,4 +249,23 @@ export default function FifteenPuzzle() {
         const id = setInterval(() => setTime((t) => t + 1), 1000);
         return () => clearInterval(id);
     }, [running, won]);
+
+    //Slide a tile at board index `bi``into`the`blank
+    const move = useCallback((bi) => {
+        if(won) return;
+        if(!getAdj(board).includes(bi)) return;
+
+        const ei = board.indexOf(0);
+        setBoard((prev) => {
+            const nb = [...prev];
+            [nb[ei], nb[bi]] = [nb[bi], nb[ei]];
+            if (isSolved(nb)) { setWon(true); setRunning(false); }
+            return nb;
+        });
+        setMoves((m) => m + 1);
+        if (!running) setRunning(true);
+    }, [board, won, running]);
+
+    //
+
 }
