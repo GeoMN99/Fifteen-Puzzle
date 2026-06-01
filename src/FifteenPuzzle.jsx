@@ -48,4 +48,16 @@ const newGame = () => {
     return b;
 };
 
-// 
+// Returns board indeces that are adjacent to the blank tile
+const getAdj = (b) => {
+    const ei = b.indexOf(0);
+    const r = Math.floor(ei / N);
+    const c = ei % N;
+    const a = [];
+    if (r > 0)     a.push(ei - N);
+    if (r < N - 1) a.push(ei + N);
+    if (c > 0)     a.push(ei - 1);
+    if (c < N - 1) a.push(ei + 1);
+    return a;
+}
+
