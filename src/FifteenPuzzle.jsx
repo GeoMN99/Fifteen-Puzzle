@@ -293,4 +293,83 @@ export default function FifteenPuzzle() {
 
     const movable = getAdj(board);
 
+    // Build tile list keyed by VALUE (not position).
+    // This is the core of smooth animation: React reuses each tile's DOM node,
+    // and only the CSS transform changes when the board updates.
+    const tiles = Array.from({ length: TOTAL }, (_, value) => {
+        const idx      = board.indexOf(value);
+        const { x, y } = tilePos(idx);
+        return { value, idx, x, y, canMove: movable.includes(idx) };
+    });
+
+    return (
+        <>
+        <style>{CSS}</style>
+        <div className="pz-root">
+            <h2 className="sr-only">Fifteen puzzle - sliding tile game</h2>
+
+            <div>
+                <div className="pz-title">FIFTEEN</div>
+                <div className="pz-sub">slide · shift · solve</div>
+            </div>
+
+            <div className="pz-stats">
+                <div className="pz-stat">
+                    <span className="pz-sn">{moves}</span>
+                    <span className="pz-sl">moves</span>
+                </div>
+                <div className="pz-stat">
+                    <span className="pz-sn">{fmt(time)}</span>
+                    <span className="pz-sl">time</span>
+                </div>
+            </div>
+
+            <div className="pz-board" style={{width: BOARD, height: BOARD}}>
+                {tiles.map(({ value, idx, x, y, canMove}) => {
+                    const empty = value === 0;
+                    return (
+                        <div
+                          key={value}
+                          onClick={() => !empty && move(idx)}
+                          classname={[
+                            "pz-title",
+                            empty   ? "pz-title-empty"   : "",
+                            canMove && !empty ? "pz-title-movable" : "",
+                          ].join(" ")}
+                          style={{
+                            width: TILE,
+                            height: TILE,
+                            trnasform: `translate(${x}px, ${y}px)`,
+                          }}
+                        >
+                          {!empty && (
+                            <>
+                              <div className="pz-dot" />
+                              <span className="pz-num">{value}</span>
+                              <span className="pz-ord">{String(value).padStart(2, "0")}</span>
+                            </>
+                          )}
+                        </div>    
+                    );
+                })}
+
+                {won && (
+                    <div className="pz-won">
+                        <div>
+                            <div className="pz-won-title">SOLVED!</div>
+                            <div className="pz-won-sub">
+                                {moves} moves in {fmt(time)}
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <button className="pz-btn" onClick={reset}>
+                {won ? "new game" : "shuffle"}
+            </button>
+            <p className="pz-hint">tap adjacent tiles to slide · arrow keys work too</p>
+        </div>
+        </>
+    );
 }
