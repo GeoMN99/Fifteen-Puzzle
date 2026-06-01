@@ -266,6 +266,31 @@ export default function FifteenPuzzle() {
         if (!running) setRunning(true);
     }, [board, won, running]);
 
-    //
+    //Arrow-key support
+    //Arrow direction moves the tile *into* the blank in that direction
+    useEffect(() => {
+        const onKey = (e) => {
+            if(won) return;
+            const ei = board.indexOf(0);
+            const r = Math.floor(ei / N);
+            const c = ei % N;
+            let ti = -1;
+            if (e.key === "ArrowUp"    & r < N - 1) ti = ei + N;
+            if (e.key === "ArrowDown"  & r > 0)     ti = ei - N;
+            if (e.key === "ArrowLeft"  & c < N - 1) ti = ei + 1;
+            if (e.key === "ArrowRight" & c > 0)     ti = ei - 1;
+            if (ti !== -1) { e.preventDefault(); move(ti); }
+        };
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, [move, board, won]);
+
+    const reset = () => {
+        setBoard(newGame());
+        setMoves(0); setTime(0);
+        setRunning(false); setWon(false);
+    };
+
+    const movable = getAdj(board);
 
 }
